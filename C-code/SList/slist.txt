@@ -1,0 +1,12 @@
+1. Insett Element in a Linked List
+2. Delete Element from a Linked List
+3. Print a Linked List
+4. Print a Linked List in reverse order
+5. Reverse a Linked List
+6. Find Kth element in a Linked List
+7. Search an element in Linked List
+8. Copy a Linked List in to other
+9. Find the middle of the Linked List
+10. Reverse K nodes in a Linked List
+11. Check if Linked List has duplicate nodes
+12 Remove Duplicates from a Linked List
