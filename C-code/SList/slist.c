@@ -302,7 +302,85 @@ slist_t *slistRemoveDups(slist_t *root)
 	}
 	return root;
 }
+/*
+Given a singly linked list, rotate the linked list
+counter-clockwise by k nodes. Where k is a given positive
+integer. For example, if the given linked list is 
+10->20->30->40->50->60 and k is 4, the list should be
+modified to 50->60->10->20->30->40.
+Assume that k is smaller than the count of nodes
+in linked list.
+*/
+slist_t *slistRotateAt(slist_t *root, int k)
+{
+	slist_t *p = NULL, *q = NULL, *kThNode = NULL;
+	p = root;
+	int count = 0;
+	while(p && count < k){
+		count++;
+		q = p;
+		p = p->next;
+	}
+	if (!p)
+	{
+		return root;
+	}
+	kThNode = q;
+	while(p){
+		q = p;
+		p = p->next;
+	}
+	q->next = root;
+	root = kThNode->next;
+	kThNode->next = NULL;
+	return root;
+}
+/*
+Delete last occurrence of an item from linked list
+*/
+slist_t *slistDeleteLactOccur(slist_t *root, int num)
+{
+	slist_t *p = NULL, *q = NULL, *lastNode = NULL;
+	p = q = root;
+	while(p){
+		if (p->data == num)
+		{
+			lastNode = q;
+		}
+		q = p;
+		p = p->next;
+	}
+	if (lastNode == root)
+	{
+		p = lastNode->next;
+		free(lastNode);
+		return p;
+	} else {
+		lastNode->next = lastNode->next->next;
+	}
+	return root;
+}
+/*
+first list is 5->7->17->13->11 and second is 12->10->2->4->6,
+O/P  2->4->5->6->7->10->11->12->13->17
+*/
+slist_t *slistMergeSorted(slist_t *root1, slist_t *root2)
+{
 
+}
+/*
+Given two linked lists, insert nodes of second list into first 
+list at alternate positions of first list.
+For example,
+first list is 5->7->17->13->11 and second is 12->10->2->4->6,
+O/P  5->12->7->10->17->2->13->4->11->6
+first list is 1->2->3 and second list is 4->5->6->7->8
+O/P 1->4->2->5->3->6->7->8.
+*/
+slist_t *slistMergeAlternare(slist_t *root1, slist_t *root2)
+{
+
+}
 int main()
 {
 	slist_t *root = NULL;
@@ -366,7 +444,13 @@ int main()
 		printf("List has no duplicate\n");
 	}
 
-	root = slistReverseKnodes(root, 2);
+	//root = slistReverseKnodes(root, 2);
+	slistShow(root);
+
+	//root = slistRotateAt(root, 5);
+	slistShow(root);
+
+	root = slistDeleteLactOccur(root, 106);
 	slistShow(root);
 
 	return 1;
