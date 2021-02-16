@@ -360,6 +360,75 @@ slist_t *slistDeleteLactOccur(slist_t *root, int num)
 	}
 	return root;
 }
+slist_t *slistBubbleSort(slist_t *root)
+{
+	slist_t *p = NULL, *q = NULL, *r = NULL;
+	int swapped = 0;
+	int tmp = 0;
+	if (!root)
+	{
+		return root;
+	} else {
+		do
+		{
+			swapped	= 0;
+			p = root;
+			while(p && p->next) {
+				if (p->data > p->next->data)
+				{
+					tmp = p->data;
+					p->data = p->next->data;
+					p->next->data = tmp;
+					swapped = 1;
+				}
+				p = p->next;
+			}
+		} while (swapped == 1);
+	}
+	return root;
+}
+slist_t *slistInsertSort(slist_t *root)
+{
+	slist_t *p = NULL, *q = NULL, *r = NULL;
+	p = root;
+	int tmp = 0;
+	while(p){
+		q = p->next;
+		while(q){
+			if (p->data > q->data)
+			{
+				tmp = p->data;
+				p->data = q->data;
+				q->data = tmp;
+			}
+			q = q->next;
+		}
+		p = p->next;
+	}
+	return root;
+}
+slist_t *slistSelectSort(slist_t *root)
+{
+	slist_t *p = NULL, *q = NULL, *min = NULL;
+	p = root;
+	int tmp = 0;
+	while(p){
+		min = p;
+		q = p->next;
+		while(q){
+			if (min->data > q->data)
+			{
+				min = q;
+			}
+			q = q->next;
+		}
+		tmp = min->data;
+		min->data = p->data;
+		p->data = tmp;
+		p = p->next;
+	}
+	return root;
+}
 /*
 first list is 5->7->17->13->11 and second is 12->10->2->4->6,
 O/P  2->4->5->6->7->10->11->12->13->17
@@ -444,13 +513,35 @@ int main()
 		printf("List has no duplicate\n");
 	}
 
-	//root = slistReverseKnodes(root, 2);
+	root = slistReverseKnodes(root, 2);
 	slistShow(root);
 
-	//root = slistRotateAt(root, 5);
+	printf("Test slistRotateAt\n");
+	root = slistRotateAt(root, 5);
 	slistShow(root);
 
+	printf("Test slistDeleteLactOccur\n");
 	root = slistDeleteLactOccur(root, 106);
+	slistShow(root);
+
+	printf("Test slistBubbleSort\n");
+	root = slistBubbleSort(root);
+	slistShow(root);
+
+	printf("Test slistRotateAt\n");
+	root = slistRotateAt(root, 2);
+	slistShow(root);
+
+	printf("Test slistInsertSort\n");
+	root = slistInsertSort(root);
+	slistShow(root);
+
+	printf("Test slistRotateAt\n");
+	root = slistRotateAt(root, 7);
+	slistShow(root);
+
+	printf("Test slistSelectSort\n");
+	root = slistSelectSort(root);
 	slistShow(root);
 
 	return 1;
