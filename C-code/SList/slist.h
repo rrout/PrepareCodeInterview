@@ -30,6 +30,11 @@ slist_t *slistRemoveDups(slist_t *root);
 slist_t *slistRotateAt(slist_t *root, int k);
 slist_t *slistDeleteLactOccur(slist_t *root, int num);
 slist_t *slistBubbleSort(slist_t *root);
+slist_t *slistInsertSort(slist_t *root);
 slist_t *slistMergeSorted(slist_t *root1, slist_t *root2);
 slist_t *slistMergeAlternare(slist_t *root1, slist_t *root2);
+slist_t *slistFindIntersect(slist_t *root1, slist_t *root2);
+
+int slistLength(slist_t *root);
+int slistLengthREC(slist_t *root);
 #endif //__SLIST__H__

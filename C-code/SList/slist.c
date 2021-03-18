@@ -450,6 +450,55 @@ slist_t *slistMergeAlternare(slist_t *root1, slist_t *root2)
 {
 
 }
+
+slist_t *slistFindIntersect(slist_t *root1, slist_t *root2)
+{
+	int list1len = 0, list2len = 0, diff = 0;
+	slist_t *list1, *list2;
+	list1 = list2 = NULL;
+	list1len = slistLength(root1);
+	list2len = slistLength(root2);
+	if(list1len > list2len) {
+		list1 = root1;
+		list2 = root2;
+		diff = list1len - list2len;
+	} else {
+		list1 = root2;
+		list2 = root1;
+		diff = list2len - list1len;
+	}
+	while(diff != 0){
+		list1 = list1->next;
+		diff--;
+	}
+	while(list1 && list2){
+		if(list1 == list2)
+			return list1;
+		list1 = list1->next;
+		list2 = list2->next;
+	}
+	return NULL;
+}
+
+int slistLength(slist_t *root)
+{
+	int len = 0;
+	while(root) {
+		len++;
+		root = root->next;
+	}
+	return len;
+}
+
+int slistLengthREC(slist_t *root)
+{
+	int len = 0;
+	if (!root)
+		return 0;
+	len += slistLengthREC(root->next);
+	return len+1;
+}
+
 int main()
 {
 	slist_t *root = NULL;
@@ -543,6 +592,9 @@ int main()
 	printf("Test slistSelectSort\n");
 	root = slistSelectSort(root);
 	slistShow(root);
+
+	printf("Test Length\n");
+	printf("Length = %d\n", slistLengthREC(root));
 
 	return 1;
 }
