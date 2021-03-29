@@ -20,7 +20,33 @@ bst_t * bstInsert(bst_t *root, int data)
 }
 bst_t * bstDelete(bst_t *root, int data)
 {
-	
+	bst_t *tmp =NULL;
+	if(!root){
+		return root;
+	}
+	if (data < root->data)
+	{
+		root->left = bstDelete(root->left , data);
+	} else if (data > root->data) {
+		root->right = bstDelete(root->right , data);
+	} else {
+		if (root->left == NULL)
+		{
+			tmp = root->right;
+			free(root);
+			return tmp;
+		} else if (root->right == NULL)
+		{
+			tmp = root->left;
+			free(root);
+			return tmp;
+		} else {
+			tmp = bstMinElement(root->right);
+			root->data = tmp->data;
+			root->right = bstDelete(root->right, tmp->data);
+		}
+	}
+	return root;
 }
 bst_t * bstTraversePreOrder(bst_t *root)
 {
@@ -284,7 +310,7 @@ bst_t * bstCreateCopy(bst_t *root)
 }
 int bstIsCopy(bst_t *root1, bst_t *root2)
 {
-	if(root1 == NULL && root2 = NULL)
+	if(root1 == NULL && root2 == NULL)
 		return 1;
 	return ((root1 == root2) && (root1->data == root2->data) && 
 		(bstIsCopy(root1->left, root2->left)) && (bstIsCopy(root1->right, root2->right)));
@@ -305,10 +331,10 @@ bst_t * bstCreateMirror(bst_t *root)
 }
 int bstIsMorror(bst_t *root1, bst_t *root2)
 {
-	if(root1 == NULL && root2 = NULL)
+	if(root1 == NULL && root2 == NULL)
 		return 1;
-	if(root1 == NULL || root2 = NULL)
-		return 0
+	if(root1 == NULL || root2 == NULL)
+		return 0;
 	return ((root1->data == root2->data) &&
 		(bstIsMorror(root1->left, root2->right)) &&
 		(bstIsMorror(root1->right, root2->left)));
