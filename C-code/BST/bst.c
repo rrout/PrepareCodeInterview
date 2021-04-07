@@ -397,3 +397,56 @@ int bstHeightREC(bst_t *root)
 	}
 	return rh+1;
 }
+
+int bstIsBalabced(bst_t *root)
+{
+	int lh = 0, rh = 0;
+	if (!root)
+	{
+		return 1;
+	}
+	lh = bstHeight(root->left);
+	rh = bstHeight(root->right);
+	if (abs(lh-rh) > 1)
+	{
+		printf("root at %d  -- the imbalance  lh=%d , rh=%d\n", root->data, lh, rh);
+		return 0;
+	}
+	return bstIsBalabced(root->left) && bstIsBalabced(root->right);
+}
+int bstIsBalabcedREC(bst_t *root, int *height)
+{
+	int lh = 0, rh = 0;
+	if (!root)
+	{
+		return 1;
+	}
+	printf("root at %d  --  lh=%d , rh=%d\n", root->data, lh, rh);
+	lh += bstIsBalabcedREC(root->left, height);
+	rh += bstIsBalabcedREC(root->right, height);
+	if (abs(lh-rh) > 1)
+	{
+		printf("root at %d  -- the imbalance  lh=%d , rh=%d\n", root->data, lh, rh);
+		*height = 1;
+	}
+	if(lh > rh)
+		return lh+1;
+	else
+		return rh+1;
+}
+
+int bstCountLeaf(bst_t  *root)
+{
+	int count = 0;
+	if (!root)
+	{
+		return 0;
+	}
+	count += bstCountLeaf(root->left);
+	count += bstCountLeaf(root->right);
+	if (root->left == NULL && root->right == NULL){
+		printf("Leaf at %d  %d\n", root->data, count);
+		return count +1;
+	}
+	return count;
+}

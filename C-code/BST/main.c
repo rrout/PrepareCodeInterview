@@ -66,5 +66,16 @@ int main(int argc, char const *argv[])
 
 	printf("------------------\n");
 	bstLeftView(root);
+
+
+	bstTraverseInOrderGRAPH(root, 0);
+	printf("bstIsBalabced  : %d\n", bstIsBalabced(root));
+	{
+		int height = 0;
+		bstIsBalabcedREC(root, &height);
+		printf("bstIsBalabcedREC  : %d\n", height);
+	}
+	
+	printf("bstCountLeaf  : %d\n", bstCountLeaf(root));
 	return 0;
 }

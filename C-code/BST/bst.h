@@ -31,7 +31,9 @@ int bstHeight(bst_t *root);
 int bstHeightREC(bst_t *root);
 int bstIsCopy(bst_t *root1, bst_t *root2);
 int bstIsMorror(bst_t *root1, bst_t *root2);
-
+int bstIsBalabced(bst_t *root);
+int bstIsBalabcedREC(bst_t *root, int *height);
+int bstCountLeaf(bst_t  *root);
 
 typedef struct _bst_dlist_s {
 	bst_t *data;
