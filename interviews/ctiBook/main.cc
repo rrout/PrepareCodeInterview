@@ -4,6 +4,73 @@
 
 #include "globalheader.h"
 
+int _print_t(tree_t *tree, int is_left, int offset, int depth, char s[20][255])
+{
+    char b[20];
+    int width = 5;
+
+    if (!tree) return 0;
+
+    sprintf(b, "(%03d)", tree->data);
+
+    int left  = _print_t(tree->left,  1, offset,                depth + 1, s);
+    int right = _print_t(tree->right, 0, offset + left + width, depth + 1, s);
+
+#ifdef COMPACT
+    for (int i = 0; i < width; i++)
+        s[depth][offset + left + i] = b[i];
+
+    if (depth && is_left) {
+
+        for (int i = 0; i < width + right; i++)
+            s[depth - 1][offset + left + width/2 + i] = '-';
+
+        s[depth - 1][offset + left + width/2] = '.';
+
+    } else if (depth && !is_left) {
+
+        for (int i = 0; i < left + width; i++)
+            s[depth - 1][offset - width/2 + i] = '-';
+
+        s[depth - 1][offset + left + width/2] = '.';
+    }
+#else
+    for (int i = 0; i < width; i++)
+        s[2 * depth][offset + left + i] = b[i];
+
+    if (depth && is_left) {
+
+        for (int i = 0; i < width + right; i++)
+            s[2 * depth - 1][offset + left + width/2 + i] = '-';
+
+        s[2 * depth - 1][offset + left + width/2] = '+';
+        s[2 * depth - 1][offset + left + width + right + width/2] = '+';
+
+    } else if (depth && !is_left) {
+
+        for (int i = 0; i < left + width; i++)
+            s[2 * depth - 1][offset - width/2 + i] = '-';
+
+        s[2 * depth - 1][offset + left + width/2] = '+';
+        s[2 * depth - 1][offset - width/2 - 1] = '+';
+    }
+#endif
+
+    return left + width + right;
+}
+
+void print_t(tree_t *tree)
+{
+    char s[20][255];
+    for (int i = 0; i < 20; i++)
+        sprintf(s[i], "%80s", " ");
+
+    _print_t(tree, 0, 0, 0, s);
+
+    for (int i = 0; i < 20; i++)
+        printf("%s\n", s[i]);
+}
+
 int listExec()
 {
 	list_t *list = NULL;
@@ -102,6 +169,7 @@ int treeExec()
 {
 	tree_t *root = NULL;
 	tree_t *tmp = NULL;
+	tree_t *nu = NULL;
 	root = treeInsert(root, 511);
 	root = treeInsert(root, 111);
 	root = treeInsert(root, 612);
@@ -182,6 +250,70 @@ int treeExec()
 	treeTraverseInOrderRECGRAPH(tmp, 0);
 	std::cout << "treeIsMirrorREC = " <<  treeIsMirrorREC(root, tmp) << std::endl;
 	tmp = treeDeleteREC(tmp);
+
+	treeTraverseInOrderRECGRAPH(root, 0);
+	root = treeDeleteREC(root, 115);
+	treeTraverseInOrderRECGRAPH(root, 0);
+
+	treeTraverseInOrderRECGRAPH(root, 0);
+	root = treeDeleteREC(root, 113);
+	treeTraverseInOrderRECGRAPH(root, 0);
+
+	tmp = treeCopyCreateREC(root);
+	treeDelete(tmp);
+
+	std::cout << "treeNodeCountREC = " <<  treeNodeCountREC(root) << std::endl;
+	std::cout << "treeNodeCount = " <<  treeNodeCount(root) << std::endl;
+	std::cout << "treeLeafCount = " <<  treeLeafCount(root) << std::endl;
+	treeTraversePreOrder(root);
+	treeTraversePreOrderREC(root);
+	std::cout << std::endl;
+	treeTraversePostOrder(root);
+	treeTraversePostOrderREC(root);
+	std::cout << std::endl;
+
+	tmp = treeBstImbalanceNode(root);
+	std::cout << "treeBstImbalanceNode = " << ((tmp)?tmp->data:0) << std::endl;
+
+	root = treeInsert(root, 1610);
+	print_t(root);
+	tmp = treeBstImbalanceNode(root);
+	std::cout << "treeBstImbalanceNode = " << ((tmp)?tmp->data:0) << std::endl;
+	root = treeBstBalance(root);
+	print_t(root);
+	std::cout << "treeBstIsBalancedREC : " << treeBstIsBalancedREC(root) << std::endl;
+
+
+	root = treeInsert(root, 1910);
+	print_t(root);
+	tmp = treeBstImbalanceNode(root);
+	std::cout << "treeBstImbalanceNode = " << ((tmp)?tmp->data:0) << std::endl;
+	root = treeBstBalance(root);
+	print_t(root);
+	std::cout << "treeBstIsBalancedREC : " << treeBstIsBalancedREC(root) << std::endl;
+
+
+	root = treeInsert(root, 1010);
+	root = treeInsert(root, 1510);
+	print_t(root);
+	tmp = treeBstImbalanceNode(root);
+	std::cout << "treeBstImbalanceNode = " << ((tmp)?tmp->data:0) << std::endl;
+	root = treeBstBalance(root);
+	print_t(root);
+	std::cout << "treeBstIsBalancedREC : " << treeBstIsBalancedREC(root) << std::endl;
+	
+
+	nu = NULL;
+	nu = treeInsert(nu, 5);
+	nu = treeInsert(nu, 1);
+	print_t(nu);
+	nu = treeInsert(nu, 3);
+	print_t(nu);
+	tmp = treeBstImbalanceNode(nu);
+	std::cout << "treeBstImbalanceNode = " << ((tmp)?tmp->data:0) << std::endl;
+	nu = treeBstBalance(nu);
+	print_t(nu);
+	std::cout << "treeBstIsBalancedREC : " << treeBstIsBalancedREC(nu) << std::endl;
 
 
 	return 1;

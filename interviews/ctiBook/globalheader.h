@@ -104,6 +104,8 @@ tree_t *treeCreateFromArrayREC(int *arr, int size);
 tree_t *treeBstCreateFromArray(int *arr, int size);
 tree_t *treeBstCreateFromArrayREC(tree_t *root, int *arr, int start, int end);
 tree_t *treeBstCreateFromArrayREC(int *arr, int size);
+tree_t *treeBstImbalanceNode(tree_t *root);
+tree_t *treeBstBalance(tree_t *root);
 
 
 void treeTraversePreOrder(tree_t *root);

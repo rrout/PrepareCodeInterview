@@ -41,11 +41,156 @@ tree_t *treeInsertREC(tree_t *root, int data)
 	}
 	return root;
 }
-tree_t *treeDelete(tree_t *root, int data){}
-tree_t *treeDeleteREC(tree_t *root, int data){}
+tree_t *treeDelete(tree_t *root, int data)
+{
+	tree_t *tmp = NULL, *curr = NULL,*par = NULL, *s = NULL,*sp = NULL;
+	if (!root)
+	{
+		return root;
+	}
+	curr = root;
+	while(curr) {
+		if (data  < root->data)
+		{
+			par = curr;
+			curr = curr->left;
+		} else if (data  > root->data)
+		{
+			par = curr;
+			curr = curr->right;
+		} else {
+			break;
+		}
+	}
+	if (!curr)
+	{
+		return root;
+	}
+	if (curr->left == NULL || curr->right == NULL)
+	{
+		if (curr->left == NULL)
+		{
+			tmp = curr->right;
+		} else {
+			tmp = curr->right;
+		}
+		if (!par)
+			return tmp;
+		else {
+			if (par->left == curr)
+				par->left = tmp;
+			else
+				par->right = tmp;
+			free(curr);
+			return root;
+		}
+	} else {
+		sp = curr;
+		s = curr->right;
+		while(s->left) {
+			sp = s;
+			s = s->left;
+		}
+		curr->data = s->data;
+		if (sp->right == s)
+			sp->right = s->right;
+		else
+			sp->left = s->right;
+	}
+	return root;
+}
+tree_t *treeDeleteREC(tree_t *root, int data)
+{
+	tree_t * tmp = NULL;
+	if (!root)
+	{
+		return root;
+	}
+	if (data < root->data)
+	{
+		root->left = treeDeleteREC(root->left, data);
+	} else if (data > root->data) {
+		root->right = treeDeleteREC(root->right, data);
+	} else {
+		if (root->left == NULL && root->right == NULL)
+		{
+			free(root);
+			return NULL;
+		}else if(root->left == NULL){
+			tmp = root->right;
+			free(root);
+			return tmp;
+		}else if(root->right == NULL){
+			tmp = root->left;
+			free(root);
+			return tmp;
+		}else{
+			tmp = root->right;
+			while(tmp->left)
+				tmp = tmp->left;
+			root->data = tmp->data;
+			root->right = treeDeleteREC(root->right, tmp->data);
+			return root;
+		}
+	}
+	return root;
+}
+tree_t *treeDeleteREC2(tree_t *root, int data)
+{
+	tree_t * tmp = NULL;
+	if (!root)
+	{
+		return root;
+	}
+	if (root->data == data)
+	{
+		if (root->left == NULL && root->right == NULL)
+		{
+			free(root);
+			return NULL;
+		}else if(root->left == NULL){
+			tmp = root->right;
+			free(root);
+			return tmp;
+		}else if(root->right == NULL){
+			tmp = root->left;
+			free(root);
+			return tmp;
+		}else{
+			tmp = root->right;
+			while(tmp->left)
+				tmp = tmp->left;
+			root->data = tmp->data;
+			root->right = treeDeleteREC(root->right, tmp->data);
+			return root;
+		}
+	}
+	root->left = treeDeleteREC(root->left, data);
+	root->right = treeDeleteREC(root->right, data);
+	return root;
+}
 tree_t *treeDelete(tree_t *root)
 {
-
+	std::stack<tree_t *> s;
+	std::vector<tree_t *> v;
+	tree_t * search = root;
+	while(search || s.empty() == false) {
+		while(search) {
+			s.push(search);
+			search = search->left;
+		}
+		search = s.top();
+		v.push_back(search);
+		s.pop();
+		search = search->right;
+	}
+	std::vector<tree_t *>::iterator i ;
+	for (i = v.begin(); i != v.end(); ++i)
+	{
+		//std::cout << (*i)->data << std::endl;
+		free(*i);
+	}
+	return NULL;
 }
 tree_t *treeDeleteREC(tree_t *root)
 {
@@ -271,10 +416,166 @@ tree_t *treeBstCreateFromArrayREC(int *arr, int size)
 	root = treeBstCreateFromArrayREC(root, arr, 0, size-1);
 	return root;
 }
+tree_t *treeBstImbalanceNode(tree_t *root)
+{
+	tree_t *tmp = NULL;
+	int lh = 0, rh = 0;
+	if (!root)
+	{
+		return root;
+	}
 
+	tmp = treeBstImbalanceNode(root->left);
+	tmp = treeBstImbalanceNode(root->right);
 
-void treeTraversePreOrder(tree_t *root){}
-void treeTraversePreOrderREC(tree_t *root){}
+	lh = treeHeightREC(root->left);
+	rh = treeHeightREC(root->right);
+	if(tmp)
+		return tmp;
+	if(abs(lh - rh) > 1)
+		return root;
+	return tmp;
+}
+/*
+https://webdocs.cs.ualberta.ca/~holte/T26/tree-rotation.html
+The pivot node is the deepest node at which there is an imbalance. The rotator node is the root of the pivot's taller subtree.
+There may be more nodes above the pivot's parent. 
+Step 3 prunes the rotator's `inside' subtree, i.e. the one on the pivot's side.
+Which of the rotator's subtrees is the inside subtree, which is the outside? 
+It depends on whether the rotator is the left or right child of the pivot.
+If the rotator is the right child (as in this picture), the inside subtree is its left subtree and the outside subtree is its right subtree.
+On the other hand,
+if the rotator is the left child the inside subtree is its right subtree and the outside subtree is its left subtree.
+Step 4: Join the pruned inside subtree to the pivot (in the place where the rotator had been).
+Step 5: Join the pivot to the rotator (in the place where inside had been).
+Step 6: Join the rotator to the pivot's (original) parent (in the place where the pivot had been).
+
+PIVOT = is the deepest node at which there is an imbalance;
+rotator = is the pivot's taller subtree
+inside = if(rotator is pivot's right child) ? (rotator's left subtree) : (rotator's right subtree) 
+outside = vice versa
+
+Step a: Join the inside to the pivot (in the place the rotator).
+Step b: Join the pivot to the rotator (in the place ofinside).
+Step c: Join the rotator to the pivot's (original) parent (in the place where the pivot had been).
+
+if (inside is heavy), double Rotation needed
+    if rotator is pivot's left  child, LR Rotation needed
+        rotate at rotator( spivot = pivot->left , srotator = spivot->right;), then do main rotation
+    if rotator is pivot's right child, RL Rotation needed
+        rotate at rotator( spivot = pivot->right , srotator = spivot->left;), then do main rotation
+
+*/
+tree_t *treeBstBalance(tree_t *root)
+{
+	tree_t *ppivot = NULL, *pivot = NULL, *rotator = NULL, *inside = NULL, *curr = NULL, *spivot= NULL;
+	int lh = 0, rh = 0;
+	if (!root)
+	{
+		return root;
+	}
+	curr = root;
+
+	pivot = treeBstImbalanceNode(root);
+	if (pivot == NULL)
+	{
+		return root;
+	}
+	while(curr) {
+		if (pivot->data < curr->data){
+			ppivot = curr;
+			curr = curr->left;
+		} else if (pivot->data > curr->data) {
+			ppivot = curr;
+			curr = curr->right;
+		} else {
+			break;
+		}
+	}
+	//std::cout << "pivot " << pivot->data << std::endl;
+	lh = treeHeightREC(pivot->left);
+	rh = treeHeightREC(pivot->right);
+	if (lh > rh)
+	{
+		rotator = pivot->left;
+		if(rotator && treeHeightREC(rotator->left) < treeHeightREC(rotator->right)) {
+			spivot = pivot->left;
+			rotator = spivot->right;
+			inside = rotator->left;
+
+			spivot->right = inside;
+			rotator->left = spivot;
+			pivot->left = rotator;
+		}
+
+		/* Right Rotation Logic */
+		rotator = pivot->left;
+		inside = rotator->right;
+
+		pivot->left = inside;
+		rotator->right = pivot;
+		if(ppivot == NULL){
+			return rotator;
+		} else if (pivot == ppivot->left) {
+			ppivot->left = rotator;
+		} else if (pivot == ppivot->right) {
+			ppivot->right = rotator;
+		}
+	} else {
+		rotator = pivot->right;
+		/* inside is left sub tree, if inside is more height thn outside, RL Rotation needed*/
+		if(rotator && treeHeightREC(rotator->right) < treeHeightREC(rotator->left)) {
+			spivot = pivot->right;
+			rotator = spivot->left;
+			inside = rotator->right;
+
+			spivot->left = inside;
+			rotator->right = spivot;
+			pivot->right = rotator;
+		}
+
+		/* Left Rotation Logic */
+		rotator = pivot->right;
+		inside = rotator->left;
+
+		pivot->right = inside;
+		rotator->left = pivot;
+		if(ppivot == NULL){
+			return rotator;
+		} else if (pivot == ppivot->left) {
+			ppivot->left = rotator;
+		} else {
+			ppivot->right = rotator;
+		}
+	}
+	return root;;
+}
+
+void treeTraversePreOrder(tree_t *root)
+{
+	std::stack<tree_t *> s;
+	s.push(root);
+	while(s.empty()==false) {
+		root = s.top();
+		s.pop();
+		std::cout <<  " " << root->data;
+		if (root->right)
+			s.push(root->right);
+		if (root->left)
+			s.push(root->left);
+	}
+	std::cout << std::endl;
+}
+void treeTraversePreOrderREC(tree_t *root)
+{
+	if (!root)
+	{
+		return;
+	}
+	std::cout << " " << root->data;
+	treeTraversePreOrderREC(root->left);
+	treeTraversePreOrderREC(root->right);
+}
 void treeTraverseInOrder(tree_t *root)
 {
 	std::stack<tree_t *> s;
@@ -300,8 +601,37 @@ void treeTraverseInOrderREC(tree_t *root)
 	std::cout << " " << root->data;
 	treeTraverseInOrderREC(root->right);
 }
-void treeTraversePostOrder(tree_t *root){}
-void treeTraversePostOrderREC(tree_t *root){}
+void treeTraversePostOrder(tree_t *root)
+{
+	std::stack<tree_t *> s;
+	std::stack<tree_t *> p;
+	s.push(root);
+	while(s.empty()==false) {
+		root = s.top();
+		s.pop();
+		p.push(root);
+		if (root->left)
+			s.push(root->left);
+		if (root->right)
+			s.push(root->right);
+	}
+	while(p.empty()==false) {
+		root = p.top();
+		p.pop();
+		std::cout <<  " " << root->data;
+	}
+	std::cout << std::endl;
+}
+void treeTraversePostOrderREC(tree_t *root)
+{
+	if (!root)
+	{
+		return;
+	}
+	treeTraversePostOrderREC(root->left);
+	treeTraversePostOrderREC(root->right);
+	std::cout << " " << root->data;
+}
 void treeTraverseLevelOrder(tree_t *root)
 {
 	tree_t *curr = root;
@@ -504,7 +834,23 @@ int treeHeightREC(tree_t *root)
 		return rh+1;
 	}
 }
-int treeNodeCount(tree_t *root){}
+int treeNodeCount(tree_t *root)
+{
+	int count = 0;
+	tree_t *curr = root;
+	std::stack<tree_t *> s;
+	while(curr || s.empty() == false) {
+		while(curr) {
+			s.push(curr);
+			curr = curr->left;
+		}
+		curr = s.top();
+		count++;
+		s.pop();
+		curr = curr->right;
+	}
+	return count;
+}
 int treeNodeCountREC(tree_t *root)
 {
 	int count = 0;
@@ -518,7 +864,23 @@ int treeNodeCountREC(tree_t *root)
 }
 int treeLeafCount(tree_t *root)
 {
-
+	int count = 0;
+	tree_t *curr = root;
+	std::stack<tree_t *> s;
+	while(curr || s.empty() == false) {
+		while(curr) {
+			s.push(curr);
+			curr = curr->left;
+		}
+		curr = s.top();
+		if (!curr->left || !curr->right){
+			//std::cout << curr->data << std::endl;
+			count++;
+		}
+		s.pop();
+		curr = curr->right;
+	}
+	return count;
 }
 int treeLeafCountREC(tree_t *root)
 {
