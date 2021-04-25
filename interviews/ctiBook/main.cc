@@ -315,6 +315,21 @@ int treeExec()
 	print_t(nu);
 	std::cout << "treeBstIsBalancedREC : " << treeBstIsBalancedREC(nu) << std::endl;
 
+  print_t(root);
+  treeBstLeftViewREC(root);
+  treeBstLeftView(root);
+  
+  root = treeConvertMirrorREC(root);
+  treeTraverseInOrderRECGRAPH(root, 0);
+  root = treeConvertMirrorREC(root);
+  treeTraverseInOrderRECGRAPH(root, 0);
+  
+  root = treeConvertMirror(root);
+  treeTraverseInOrderRECGRAPH(root, 0);
+  root = treeConvertMirror(root);
+  treeTraverseInOrderRECGRAPH(root, 0);
+  
+
 
 	return 1;
 }

@@ -376,6 +376,45 @@ tree_t *treeMirrorCreateREC(tree_t *root)
 	}
 	return mtree;
 }
+tree_t *treeConvertMirror(tree_t *root)
+{
+  std::stack<tree_t *> is;
+  std::stack<tree_t *> os;
+  tree_t *curr = NULL ,*tmp = NULL;
+  if(!root)
+    return root;
+  curr = root;
+  is.push(curr);
+  while(!is.empty()) {
+    curr = is.top();
+    is.pop();
+    os.push(curr);
+    if(curr->right)
+      is.push(curr->right);
+    if(curr->left)
+      is.push(curr->left);
+  }
+  while(!os.empty()) {
+    curr = os.top();
+    os.pop();
+    tmp = curr->left;
+    curr->left = curr->right;
+    curr->right = tmp; 
+  }
+  return root;
+}
+tree_t *treeConvertMirrorREC(tree_t *root)
+{
+  tree_t *tmp = NULL;
+  if(!root)
+    return root;
+  treeConvertMirrorREC(root->left);
+  treeConvertMirrorREC(root->right);
+  tmp = root->left;
+  root->left = root->right;
+  root->right = tmp;
+  return root;
+}
 tree_t *treeCopyCreate(tree_t *root){}
 tree_t *treeCopyCreateREC(tree_t *root)
 {
@@ -689,7 +728,52 @@ void treeTraverseInOrderRECGRAPH(tree_t *root, int space)
 	std::cout << " " << root->data << std::endl;
 	treeTraverseInOrderRECGRAPH(root->left,space+1);
 }
-
+void treeBstLeftView(tree_t *root)
+{
+  std::queue<tree_t *> q;
+  int level = 0;
+  if (!root)
+    return;
+  q.push(root);
+  while (q.empty() == false)
+  {
+    int size = q.size();
+    int i = 0;
+    while(size) {
+      root = q.front();
+      q.pop();
+      if (i == 0)
+        std::cout << "  " << root->data << std::endl;
+      
+      if(root->left)
+        q.push(root->left);
+      if(root->right)
+        q.push(root->right);
+        
+      i++;
+      size--;
+    }
+  }     
+}
+//Helper
+void treeBstLeftViewREC(tree_t *root, int level, int *atLevel)
+{
+    if (!root)
+        return;
+    //std::cout << level  << "-----" << *atLevel << std::endl;
+    if (*atLevel < level) 
+    {
+        std::cout << "  " << root->data << std::endl;
+        *atLevel = level;
+    }
+    treeBstLeftViewREC(root->left, level+1, atLevel);
+    treeBstLeftViewREC(root->right, level+1, atLevel);  
+}
+void treeBstLeftViewREC(tree_t *root)
+{
+    int atlevel = -1;
+    treeBstLeftViewREC(root, 0, &atlevel);  
+}
 
 bool treeIsBst(tree_t *root)
 {

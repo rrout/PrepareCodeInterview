@@ -5,6 +5,8 @@ using namespace std;
 #include <iostream>
 #include <stack>
 #include <queue>
+#include <map>
+#include <algorithm>
 
 typedef struct list_s {
 	int data;
@@ -97,6 +99,8 @@ tree_t *treeBstInorderPredissor(tree_t *root);
 tree_t *treeBstInorderPredissorREC(tree_t *root);
 tree_t *treeMirrorCreate(tree_t *root);
 tree_t *treeMirrorCreateREC(tree_t *root);
+tree_t *treeConvertMirror(tree_t *root);
+tree_t *treeConvertMirrorREC(tree_t *root);
 tree_t *treeCopyCreate(tree_t *root);
 tree_t *treeCopyCreateREC(tree_t *root);
 tree_t *treeCreateFromArray(int *arr, int size);
@@ -117,6 +121,8 @@ void treeTraversePostOrderREC(tree_t *root);
 void treeTraverseLevelOrder(tree_t *root);
 void treeTraverseLevelOrderREC(tree_t *root);
 void treeTraverseInOrderRECGRAPH(tree_t *root, int space);
+void treeBstLeftView(tree_t *root);
+void treeBstLeftViewREC(tree_t *root);
 
 bool treeIsBst(tree_t *root);
 bool treeIsBstREC(tree_t *root);
