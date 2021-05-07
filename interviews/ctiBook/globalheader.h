@@ -6,7 +6,10 @@ using namespace std;
 #include <stack>
 #include <queue>
 #include <map>
+#include <set>
+#include <unordered_set>
 #include <algorithm>
+#include <bits/stdc++.h>
 
 typedef struct list_s {
 	int data;
@@ -19,6 +22,8 @@ list_t *listPrint(list_t *root);
 list_t *listPrintREC(list_t *root);
 list_t *listReverse(list_t *root);
 list_t *listReverseREC(list_t *root);
+list_t *listReverseWithNPair(list_t *root, int n);
+list_t *listReverseAlternateWithNPair(list_t *root, int n);
 list_t *listMiddle(list_t *root);
 list_t *listBubbleSort(list_t *root);
 list_t *listSelectSort(list_t *root);
@@ -39,6 +44,16 @@ bool listCompareREC(list_t *root1, list_t *root2);
 int listCount(list_t *root);
 int listCountREC(list_t *root);
 
+list_t *listSpiltAlternate(list_t *root, list_t **list1, list_t **list2);
+list_t *listMergeAlternate(list_t *list1, list_t *list2);
+list_t *listMergeSorted(list_t *list1, list_t *list2);
+list_t *listFindIntersect(list_t *list1, list_t *list2);
+list_t *listFindRemoveElements(list_t *list1, list_t *list2);
+list_t *listCircularNShift(list_t *root, int n);
+bool listHasCycle(list_t *root);
+list_t *listRemoveDups(list_t *root);
+list_t *listMakeAlternateLowHigh(list_t *root);
+list_t *listSeparateOddEven(list_t *root);
 
 
 

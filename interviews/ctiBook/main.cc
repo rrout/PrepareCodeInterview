@@ -74,6 +74,8 @@ void print_t(tree_t *tree)
 int listExec()
 {
 	list_t *list = NULL;
+	list_t *list1 = NULL;
+	list_t *list2 = NULL;
 	list = listInsert(list, 111);
 	list = listInsert(list, 211);
 	list = listInsert(list, 112);
@@ -156,6 +158,57 @@ int listExec()
 
 	tmp = listFindLoop(list);
 	std::cout << "listFindLoop = " << ((tmp)?tmp->data:0) << std::endl;
+
+	listPrint(list);
+	list1 = list2 = NULL;
+	list = listSpiltAlternate(list, &list1, &list2);
+	std::cout << "list" << std::endl;
+	listPrint(list);
+	std::cout << "list1" << std::endl;
+	listPrint(list1);
+	std::cout << "list2" << std::endl;
+	listPrint(list2);
+	std::cout << "Merging list1 and list2" << std::endl;
+	list = listMergeAlternate(list1, list2);
+	listPrint(list);
+
+	tmp = listFindIntersect(list1, list2);
+	std::cout << "listFindIntersect = " << ((tmp)?tmp->data:0) << std::endl;
+
+	list1 = list2 = NULL;
+	list = listSpiltAlternate(list, &list1, &list2);
+	std::cout << "list1" << std::endl;
+	listPrint(list1);
+	std::cout << "list2" << std::endl;
+	listPrint(list2);
+	tmp = listFindIntersect(list1, list2);
+	std::cout << "listFindIntersect = " << ((tmp)?tmp->data:0) << std::endl;
+	std::cout << "Merging list1 and list2 Sorted" << std::endl;
+	list = listMergeSorted(list1, list2);
+	listPrint(list);
+
+	list = listReverseWithNPair(list, 2);
+	listPrint(list);
+	list = listReverseAlternateWithNPair(list, 2);
+	listPrint(list);
+
+	list = listCircularNShift(list, 2);
+	listPrint(list);
+
+	std::cout << "listHasCycle : " << listHasCycle(list) << std::endl;
+
+	list = listRemoveDups(list);
+	listPrint(list);
+
+	std::cout << "listMakeAlternateLowHigh : " << std::endl;
+	list = listMakeAlternateLowHigh(list);
+	listPrint(list);
+
+	list = listSelectSort(list);
+	listPrint(list);
+	
+	list = listSeparateOddEven(list);
+	listPrint(list);
 
 
 	return 1;
@@ -347,7 +400,7 @@ int main(int argc, char const *argv[])
 {
 	listExec();
 	dlistExec();
-	treeExec();
+	//treeExec();
 	stringsExec();
 	bitsExec();
 
