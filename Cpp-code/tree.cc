@@ -7,7 +7,6 @@ template <class T> tree<T>::~tree(){
 }
 /* PRIVATE FUNCTIONS */
 template <class T> treenode<T> *tree<T>::insertREC(treenode<T> *root, T data){
-	treenode<T> *node = new treenode<T>(data);
 	if(!root) {
 		treenode<T> *node = new treenode<T>(data);
 		return node;
@@ -72,7 +71,17 @@ template <class T> void tree<T>::printLeftViewREC(treenode<T> *root, int h, bool
 	}
 	printLeftViewREC(root->right, h-1, print);
 }
-
+template <class T> void tree<T>::printRightViewREC(treenode<T> *root, int h, T &print){
+	if (!root)
+		return;
+	printRightViewREC(root->left, h-1, print);
+	if (h == 0)
+	{
+		print = root->data;
+		return;
+	}
+	printRightViewREC(root->right, h-1, print);
+}
 template <class T> treenode<T> *tree<T>::searchREC(treenode<T> *root, T data){
 	treenode<T> *tmp = nullptr;
 	if (!root)
@@ -105,8 +114,35 @@ template <class T> treenode<T> *tree<T>::maxElemREC(treenode<T> *root){
 		tmp = maxElemREC(root->left);
 	return tmp;
 }
-template <class T> treenode<T> *tree<T>::findLcaREC(treenode<T> *root){}
-template <class T> treenode<T> *tree<T>::findbstLcaREC(treenode<T> *root){}
+template <class T> treenode<T> *tree<T>::findLcaREC(treenode<T> *root, T x, T y){
+	treenode<T> *llca;
+	treenode<T> *rlca;
+	if(!root)
+		return nullptr;
+	if (root->data == x || root->data == y)
+		return root;
+	llca = findLcaREC(root->left, x, y);
+	rlca = findLcaREC(root->right, x, y);
+
+	if(llca && rlca)
+		return root;
+	if(llca)
+		return llca;
+	else 
+		return rlca;
+}
+template <class T> treenode<T> *tree<T>::findbstLcaREC(treenode<T> *root, T x, T y){
+	treenode<T> *lca;
+	if(!root)
+		return nullptr;
+	if(root->data < x && root->data < y)
+		lca = findbstLcaREC(root->left, x, y);
+	else if (root->data > x && root->data > y)
+		lca = findbstLcaREC(root->right, x, y);
+	else
+		return root;
+	return lca;
+}
 template <class T> int tree<T>::heightREC(treenode<T> *root){
 	int lh = 0;
 	int rh = 0;
@@ -152,6 +188,35 @@ template <class T> treenode<T> *tree<T>::findDeepImbalanceNodeREC(treenode<T> *r
 	else
 		return node;
 	node = findDeepImbalanceNodeREC(root->right);
+}
+template <class T>
+bool tree<T>::findPathREC(treenode<T> *root, T data, std::vector<treenode<T> *> &v){
+	if(!root)
+		return false;
+	v.push_back(root);
+	if(root->data == data)
+		return true;
+	if(findPathREC(root->left, data, v) ||
+		findPathREC(root->right, data, v)) {
+		return true;
+	}
+	v.pop_back();
+	return false;
+}
+template <class T>
+bool tree<T>::findBstPathREC(treenode<T> *root, T data, std::vector<treenode<T> *> &v){
+	bool ret = false;
+	if(!root)
+		return false;
+	v.push_back(root);
+	if (data < root->data) {
+		ret = findBstPathREC(root->left, data, v);
+	} else if (data > root->data){
+		ret =  findBstPathREC(root->right, data, v);
+	} else {
+		return true;
+	}
+	return ret;
 }
 
 
@@ -325,7 +390,38 @@ template <class T> void tree<T>::printLeftViewREC(){
 	}
 	std::cout << std::endl;
 }
+template <class T> void tree<T>::printRightView(){
+	std::cout << __func__ << ": ";
+	std::queue<treenode<T> *> q;
+	treenode<T> *curr = nullptr;
+	q.push(treeroot);
 
+	while(q.empty() != true){
+		int count = q.size();
+		for (int i = 0; i < count; ++i)
+		{
+			curr = q.front();
+			if(curr->left)
+				q.push(curr->left);
+			if(curr->right)
+				q.push(curr->right);
+			q.pop();
+		}
+		std::cout << " "  << curr->data;
+	}
+	std::cout << std::endl;
+}
+template <class T> void tree<T>::printRightViewREC(){
+	std::cout << __func__ << ":";
+	T print;
+	int height = heightREC(treeroot);
+	for (int i = 0; i < height; ++i)
+	{
+		printRightViewREC(treeroot, i, print);
+		std::cout << " " << print;
+	}
+	std::cout << std::endl;
+}
 template <class T> treenode<T> *tree<T>::search(T data){
 	treenode<T> *p = treeroot;
 	while(p) {
@@ -363,12 +459,91 @@ template <class T> treenode<T> *tree<T>::maxElem(){
 template <class T> treenode<T> *tree<T>::maxElemREC(){
 	return maxElemREC(treeroot);
 }
-template <class T> treenode<T> *tree<T>::findLca(){}
-template <class T> treenode<T> *tree<T>::findLcaREC(){}
-template <class T> treenode<T> *tree<T>::findBstLca(){}
-template <class T> treenode<T> *tree<T>::findbstLcaREC(){}
+template <class T> treenode<T> *tree<T>::findLca(T x, T y){
+	bool ret;
+	std::vector<treenode<T> *> v1, v2;
+	ret = findPathREC(x, v1);
+	ret |= findPathREC(y, v2);
+
+	if (ret)
+	{
+		for (unsigned int i = 0; i < v1.size(); ++i)
+		{
+			if (v1[i] != v2[i]) {
+				if(i == 0)
+					return v1[i];
+				else
+					return v1[i-1];
+			}
+		}
+	}
+	return nullptr;
+}
+template <class T> treenode<T> *tree<T>::findLcaREC(T x, T y){
+	return findLcaREC(treeroot, x , y);
+}
+template <class T> treenode<T> *tree<T>::findBstLca(T x, T y){
+	treenode<T> *p = treeroot;
+	if(!treeroot)
+		return treeroot;
+	while(p) {
+		if (p->data < x && p->data < y)
+			p = p->left;
+		else if (p->data > x && p->data > y)
+			p = p->right;
+		else
+			return p;
+	}
+	return nullptr;
+}
+template <class T> treenode<T> *tree<T>::findbstLcaREC(T x, T y){
+	return findbstLcaREC(treeroot, x , y);
+}
 template <class T> treenode<T> *tree<T>::findDeepImbalanceNodeREC(){
 	return findDeepImbalanceNodeREC(treeroot);
+}
+template <class T>
+void  tree<T>::printPath(T data){
+	bool ret = false;
+	std::vector<treenode<T> *> v;
+	if (isBst()) {
+		ret = findBstPathREC(data, v);
+	} else {
+		ret = findPathREC(data, v);
+	}
+	if (ret) {
+		for (unsigned int i = 0; i < v.size(); ++i)
+		{
+			std::cout << "[" << v[i]->data << "] --> ";
+		}
+		std::cout << std::endl;
+	} else {
+		std::cout << "Path to " << data << " not found" << std::endl;
+	}
+}
+template <class T>
+bool tree<T>::findPathREC(T data, std::vector<treenode<T> *> &v){
+	return findPathREC(treeroot, data, v);
+}
+template <class T>
+bool tree<T>::findBstPath(T data, std::vector<treenode<T> *> &v){
+	treenode<T> *p = treeroot;
+	if (!treeroot)
+		return false;
+	while(p) {
+		v.push_back(p);
+		if(data < p->data)
+			p = p->left;
+		else if(data > p->data)
+			p = p->right;
+		else
+			return true;
+	}
+	return false;
+}
+template <class T>
+bool tree<T>::findBstPathREC(T data, std::vector<treenode<T> *> &v){
+	return findBstPathREC(treeroot, data, v);
 }
 
 template <class T> int tree<T>::height(){
@@ -434,3 +609,4 @@ template <class T> bool tree<T>::isBalancedREC(){
 }
 //Explicitly instantiate the template
 template class tree<int>;
+template class tree<std::string>;

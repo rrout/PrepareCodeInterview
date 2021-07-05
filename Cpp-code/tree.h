@@ -38,13 +38,16 @@ private:
 	void postorderTraverseREC(treenode<T> *root);
 	void levelorderTraverseREC(treenode<T> *root, int h);
 	void printLeftViewREC(treenode<T> *root, int h, bool *print);
+	void printRightViewREC(treenode<T> *root, int h, T &print);
 
 	treenode<T> *searchREC(treenode<T> *root, T data);
 	treenode<T> *minElemREC(treenode<T> *root);
 	treenode<T> *maxElemREC(treenode<T> *root);
-	treenode<T> *findLcaREC(treenode<T> *root);
-	treenode<T> *findbstLcaREC(treenode<T> *root);
+	treenode<T> *findLcaREC(treenode<T> *root, T x, T y);
+	treenode<T> *findbstLcaREC(treenode<T> *root, T x, T y);
 	treenode<T> *findDeepImbalanceNodeREC(treenode<T> *root);
+	bool findPathREC(treenode<T> *root, T data, std::vector<treenode<T> *> &v);
+	bool findBstPathREC(treenode<T> *root, T data, std::vector<treenode<T> *> &v);
 	int heightREC(treenode<T> *root);
 	bool isBstREC(treenode<T> *root);
 	bool isBalancedREC(treenode<T> *root);
@@ -69,6 +72,9 @@ public:
 	void levelorderTraverseREC();
 	void printLeftView();
 	void printLeftViewREC();
+	void printRightView();
+	void printRightViewREC();
+	void printPath(T data);
 
 	treenode<T> *search(T data);
 	treenode<T> *searchREC(T data);
@@ -76,10 +82,13 @@ public:
 	treenode<T> *minElemREC();
 	treenode<T> *maxElem();
 	treenode<T> *maxElemREC();
-	treenode<T> *findLca();
-	treenode<T> *findLcaREC();
-	treenode<T> *findBstLca();
-	treenode<T> *findbstLcaREC();
+	treenode<T> *findLca(T x, T y);
+	treenode<T> *findLcaREC(T x, T y);
+	treenode<T> *findBstLca(T x, T y);
+	treenode<T> *findbstLcaREC(T x, T y);
+	bool findPathREC(T data, std::vector<treenode<T> *> &v);
+	bool findBstPath(T data, std::vector<treenode<T> *> &v);
+	bool findBstPathREC(T data, std::vector<treenode<T> *> &v);
 	treenode<T> *findDeepImbalanceNodeREC();
 	
 

@@ -36,7 +36,7 @@ int treeExe()
 {
 	std::vector<int> v{55, 555, 22, 222, 33, 333, 77, 777, 8,888};
 	tree<int> t;
-	for (int i = 0; i < v.size(); i++){
+	for (unsigned int i = 0; i < v.size(); i++){
 		t.insertREC(v[i]);
 	}
 	t.insertREC(5);
@@ -90,6 +90,33 @@ int treeExe()
 	std::cout << "maxElem : " << std::endl;
 	if(tmp) tmp->print();
 
+	tree<std::string> t1;
+	t1.insertREC("RRRR");
+	t1.insertREC("AAAA");
+	t1.insertREC("SSSS");
+	t1.insertREC("HHHH");
+	t1.insertREC("MMMM");
+	t1.insertREC("IIII");	
+	t1.print();
+
+	tmp = t.findLca(5, 555);
+	std::cout << "findLca : " << std::endl;
+	if(tmp) tmp->print();
+	tmp = t.findLcaREC(5, 555);
+	std::cout << "findLcaREC : " << std::endl;
+	if(tmp) tmp->print();
+	tmp = t.findBstLca(5, 555);
+	std::cout << "findBstLca : " << std::endl;
+	if(tmp) tmp->print();
+	tmp = t.findbstLcaREC(5, 555);
+	std::cout << "findbstLcaREC : " << std::endl;
+	if(tmp) tmp->print();
+
+	t.printPath(77);
+	t.printPath(7777);
+
+	t.printRightViewREC();
+	t.printRightView();
 
 	return 0;
 }
