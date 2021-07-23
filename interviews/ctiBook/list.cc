@@ -667,3 +667,87 @@ list_t *listSeparateOddEven(list_t *root)
 	odd->next = NULL;
 	return even;
 }
+list_t *listReverseInRange(list_t *root, int pos1, int pos2)
+{
+	list_t *p = NULL, *q = NULL, *r = NULL;
+	list_t *stTail = NULL, *rangetail = NULL;
+	int count = 0;
+	p = root;
+	if (pos1 < 0 || pos2 < 0 || pos2 < pos1)
+		return root;
+	while(p && count < pos1) {
+		q = p;
+		p = p->next;
+		count++;
+	}
+	if (!p)
+		return root;
+	stTail = q;
+	rangetail = p;
+	count = pos1;
+	while (p && count <= pos2) {
+		q = p;
+		p = p->next;
+		q->next = r;
+		r = q;
+		count++;
+	}
+	
+	if (pos1 != 0){
+		stTail->next = r;
+		rangetail->next = p;
+	} else {
+		rangetail->next = p;
+		return q;
+	}	
+	return root;
+}
+//https://www.techiedelight.com/swap-kth-node-beginning-with-kth-node-end/
+list_t *listSwapNthNNode(list_t *root, int n)
+{
+	list_t *p = NULL, *q = NULL, *r = NULL;
+	list_t *prevNnodeFromHead = NULL, *prevNnodeFromtail = NULL;
+	int count = 0;
+	p = root;
+	//
+
+	// Boundry check is missing
+
+	//
+	while (p && count < n) {
+		q = p;
+		p = p->next;
+		count++;
+	}
+	prevNnodeFromHead = q;
+	std::cout << prevNnodeFromHead->data << std::endl;
+	q = root;
+	p = p->next;
+	while (p) {
+		r = q;
+		p = p->next;
+		q = q->next;
+	}
+	prevNnodeFromtail = r;
+	std::cout << prevNnodeFromtail->data << std::endl;
+
+#if 0	
+	p = prevNnodeFromHead->next;
+	prevNnodeFromHead->next = prevNnodeFromtail->next;
+	q = prevNnodeFromtail->next->next;
+	//q->next = p;
+	prevNnodeFromtail->next->next = p->next;
+	prevNnodeFromtail->next = p;
+	p->next = q;
+#endif
+	p = prevNnodeFromHead->next;
+	prevNnodeFromHead->next = prevNnodeFromtail->next;
+	q = prevNnodeFromtail->next->next;
+	prevNnodeFromtail->next->next = p->next;
+	p->next = q;
+	prevNnodeFromtail->next = p;
+
+
+	return root;
+}
+

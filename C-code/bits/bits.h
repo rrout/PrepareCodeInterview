@@ -37,9 +37,38 @@ So XOR ing anything with 0 will be unmodified
 												}\
 											}
 
-
 #define BITSUTIL_SIZEOF_VAR(var) 		(size_t) ((char *)(&var+1) - (char *)(&var))
 #define BITSUTIL_SIZEOF_TYPE(type)		(size_t) ((type *)0+1)
 #define BITSUTIL_OFFSETOF(struct, elem)	(size_t) (((struct *)(0))->elem)
+
+#define BITSUTIL_IS_EVEN_NUMBER(var)	((var & 0x1) == 0)
+#define BITSUTIL_IS_ODD_NUMBER(var)	(var & 0x1)
+
+#define BITSUTIL_SWAP_INT(var1, var2)	{ \
+											var1 = var1 + var2;	\
+											var2 = var1 - var2;	\
+											var1 = var1 - var2;	\
+										}
+
+#define BITSUTIL_POWEROF2(var)			(var & (var -1) == 0)
+#define BITSUTIL_TOGGLE(var)			(var ^ (~0))
+
+
+
+
+
+
+
+
+int bitsUtilPrintBinary(int var);
+int bitsUtilFindPositionOfFirstSetBit(int var);
+int bitsUtilParity(int var);
+int bitsUtilCountBits(int var);
+int bitsUtilNestPowerOf2(int var);
+int bitsUtilSwapBits(int var, int bitx, int bity);
+int bitsUtilIsPowerOf4(int var);
+int bitsUtilIsPowerOfX(int var, int x);
+int bitsUtilCircularClockWiseShiftNbits(int var, int n);
+
 
 #endif

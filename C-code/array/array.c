@@ -372,3 +372,32 @@ int arrayPrint(int *arr, int size)
 	printf("\n");
 	return 0;
 }
+
+int arrayPrintMaxSubArray(int *arr, int size, int num)
+{
+	int len = 0, endindex = 0, sum = 0;
+	int i , j;
+	for ( i = 0; i < size; i++)
+	{
+		sum = 0;
+		for ( j = i+1; j < size; j++)
+		{
+			sum += arr[j];
+			if (sum == num) {
+				if (len < (j - i )) {
+					len = j - i;
+					endindex = j;
+					printf("endindex %d  %d (%d)found\n", i, j, len);
+				}
+			}
+			if (sum > num)
+				break;
+		}
+	}
+	if(len)
+		printf("Max len : %d   [ %d ---- %d ]\n", len, endindex-len+1, endindex);
+	else
+		printf("Num %d not found\n", num);
+
+	return 1;
+}

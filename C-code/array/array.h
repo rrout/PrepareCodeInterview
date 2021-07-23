@@ -22,3 +22,4 @@ int arrayIsSorted(int *arr, int size);
 int arrayFindDup(int *arr, int size);
 int arrayCopy(int *src, int *dst, int size);
 int arrayPrint(int *arr, int size);
+int arrayPrintMaxSubArray(int *arr, int size, int num);

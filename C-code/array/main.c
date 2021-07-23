@@ -49,5 +49,6 @@ int main(int argc, char const *argv[])
 	quickSort(y, 0, 10);
 	arrayPrint(y, 10);
 
+	arrayPrintMaxSubArray(arr, 10, 66);
 	return 0;
 }

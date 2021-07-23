@@ -54,6 +54,8 @@ bool listHasCycle(list_t *root);
 list_t *listRemoveDups(list_t *root);
 list_t *listMakeAlternateLowHigh(list_t *root);
 list_t *listSeparateOddEven(list_t *root);
+list_t *listReverseInRange(list_t *root, int pos1, int pos2);
+list_t *listSwapNthNNode(list_t *root, int n);
 
 
 

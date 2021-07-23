@@ -210,6 +210,13 @@ int listExec()
 	list = listSeparateOddEven(list);
 	listPrint(list);
 
+	std::cout << "listReverseInRange : " << std::endl;
+	list = listReverseInRange(list, 0, 4);
+	listPrint(list);
+
+	list = listSwapNthNNode(list, 2);
+	listPrint(list);
+
 
 	return 1;
 }
